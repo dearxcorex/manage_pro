@@ -3,8 +3,8 @@ import time
 
 
 
-pro_1 = { "start":[int(30 * 1e6),int(47 * 1e6),int(25 * 1e3)],
-          "start_1":[int(47 * 1e6),int(68 * 1e6),int(12.5 * 1e3)]
+pro_1 = { 
+          "start_1":[int(328.7 * 1e6),int(335.3 * 1e6),int(150 * 1e3)]
         }
 
 

@@ -94,14 +94,87 @@ class Pro:
 
 
         return True
+    
+
+    def pro_2(self,date,**kwargs):
+                #set data 
+        pro_2 = {"B1":[int(108 * 1e6),int(118 * 1e6),int(50 * 1e3)],
+                "B2":[int(118 * 1e6),int(137 * 1e6),int(25 * 1e3)],
+                "B3":[int(137 * 1e6),int(156 * 1e6),int(12.5 * 1e3)],
+                "B4":[int(156 * 1e6),int(162.05 * 1e6),int(25 * 1e6)],
+                "B5":[int(162.05 * 1e6),int(174 * 1e6),int(12.5 * 1e6)],
+                "B6":[int(174.9280 * 1e6),int(176.6400 * 1e6),int(178.3520 * 1e6),
+                      int(180.0640* 1e6),int(181.9360 * 1e6),int(183.6480 * 1e6),
+                      int(185.3600 * 1e6),int(187.0720 * 1e6),int(188.9280 * 1e6),
+                      int(190.6400 * 1e6),int(192.3520 * 1e6),int(194.0640 * 1e6),
+                      int(195.9360 * 1e6),int(197.6480 * 1e6),int(199.3600 * 1e6),
+                      int(201.0720 * 1e6),int(202.9280 * 1e6),int(204.6400 * 1e6),
+                      int(206.3520 * 1e6),int(208.0640 * 1e6),int(209.9360 * 1e6),
+                      int(211.6480 * 1e6),int(213.3600 * 1e6),int(215.0720 * 1e6),
+                      int(216.9280* 1e6),int(218.6400 * 1e6),int(220.3520 * 1e6),
+                      int(222.0640 * 1e6),int(223.9360 * 1e6),int(225.6480 * 1e6),
+                      int(227.3600 * 1e6),int(229.0720 * 1e6)]}
+        
+        freq = kwargs.get('freq',[])
+
+        #process
+        i = 0
+        for k,v in pro_2.items():
+            #create new dataFrame every time
+            self.df = pd.DataFrame()
+            i += 1
+            
+            #add frequency_list
+            if k == "B8":
+                self.df['Frequency (Hz)'] = pro_2["B6"]
+                self.process(freq)
+                self.df['File Info'] = self.create_info(1,date)
+
+                self.df.to_csv(f"test{i}.csv",index=False)
 
 
+            else:
+                self.df['Frequency (Hz)'] = pd.Series(range(v[0], v[1] + v[2], v[2]))            
+                self.process(freq)
+                self.df['File Info'] = self.create_info(1,date)
+
+                self.df.to_csv(f"test{i}.csv",index=False)
+                
+
+    def pro_3(self,date,**kwargs):
+        
+        pro_3 = {"B1":[int(230 * 1e6),int(245 * 1e6),int(25 * 1e3)],
+                 "B2":[int(247 * 1e6),int(300 * 1e6),int(25 * 1e3)],
+                 "B3":[int(300 * 1e6),int(320.1 * 1e6),int(300 * 1e3)],
+                 "B4":[int(300.15 * 1e6),int(319.95 * 1e6),int(300 * 1e6)],
+                 "B5":[int(320.1 * 1e6),int(328.6 * 1e6),int(25 * 1e6)],
+                 "B6":[int(328.7 * 1e6),int(335.3 * 1e6),int(150 * 1e3),]}
+        
+
+          #set frequency 
+        freq = kwargs.get('freq',[])
+
+        #process
+        i = 0
+        for k,v in pro_3.items():
+            #create new dataFrame every time
+            self.df = pd.DataFrame()
+            i += 1
+            #self.df['Frequency (Hz)'] = pd.Series(range(pro_1['start'],pro_1['stop']+ pro_1['step'],pro_1['step']))
+            self.df['Frequency (Hz)'] = pd.Series(range(v[0], v[1] + v[2], v[2]))            
+            self.process(freq)
+            self.df['File Info'] = self.create_info(1,date)
+
+            self.df.to_csv(f"test{i}.csv",index=False)
 
 
+        return True
 
 
 
 
 
 pro = Pro()
-print(pro.pro_1(230501,freq = None))
+#print(pro.pro_1(230501,freq = None))
+
+pro.pro_2(230501,freq=None)
