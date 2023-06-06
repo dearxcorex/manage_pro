@@ -10,7 +10,7 @@ options = Options()
 options.add_experimental_option("detach", True)
 
 driver = webdriver.Chrome(options=options)
-driver.get("https://fmr.nbtc.go.th/NBTCROS/Login.aspx")
+driver.get("")
 
 
 
@@ -22,8 +22,8 @@ click_login = driver.find_element(By.ID, "bLogin")
 
 
 
-user.send_keys("puvakrint.p")
+user.send_keys("")
 time.sleep(3)
-password.send_keys("Dearxcore555#@")
+password.send_keys("")
 time.sleep(3)
 click_login.click()
