@@ -3,9 +3,6 @@ from quantiphy import Quantity
 from datetime import datetime
 
 
-
-
-
 class Pro:
     def __init__(self):
         self.df = pd.DataFrame() 
@@ -21,7 +18,6 @@ class Pro:
         else:
             self.df["Occupancy (%)"]  = 0
     
-
 
     def create_info(self,pro,date):
         #get info
@@ -125,7 +121,7 @@ class Pro:
             i += 1
             
             #add frequency_list
-            if k == "B8":
+            if k == "B6":
                 self.df['Frequency (Hz)'] = pro_2["B6"]
                 self.process(freq)
                 self.df['File Info'] = self.create_info(1,date)
@@ -140,7 +136,7 @@ class Pro:
 
                 self.df.to_csv(f"test{i}.csv",index=False)
             
-                
+        return True      
 
     def pro_3(self,date,**kwargs):
         
@@ -161,7 +157,6 @@ class Pro:
             #create new dataFrame every time
             self.df = pd.DataFrame()
             i += 1
-            #self.df['Frequency (Hz)'] = pd.Series(range(pro_1['start'],pro_1['stop']+ pro_1['step'],pro_1['step']))
             self.df['Frequency (Hz)'] = pd.Series(range(v[0], v[1] + v[2], v[2]))            
             self.process(freq)
             self.df['File Info'] = self.create_info(1,date)
@@ -172,10 +167,88 @@ class Pro:
         return True
 
 
+    def pro_4(self,date,**kwargs):
+        pro_4 = {"B1":[int(380.00625 * 1e6),int(470 * 1e6),int(12.5 * 1e3)]}
+          #set frequency 
+        freq = kwargs.get('freq',[])
+
+        #process
+        i = 0
+        for k,v in pro_4.items():
+            #create new dataFrame every time
+            self.df = pd.DataFrame()
+            i += 1
+            self.df['Frequency (Hz)'] = pd.Series(range(v[0], v[1] + v[2], v[2]))            
+            self.process(freq)
+            self.df['File Info'] = self.create_info(1,date)
+
+            self.df.to_csv(f"test{i}.csv",index=False)
+
+
+        return True
+
+    def pro_5(self,date,**kwargs):
+        pro_5 = {"B1":[int(803 * 1e6),int(814 * 1e6),int(25 * 1e3)]}
+        #set frequency 
+        freq = kwargs.get('freq',[])
+
+        #process
+        i = 0
+        for k,v in pro_5.items():
+            #create new dataFrame every time
+            self.df = pd.DataFrame()
+            i += 1
+            self.df['Frequency (Hz)'] = pd.Series(range(v[0], v[1] + v[2], v[2]))            
+            self.process(freq)
+            self.df['File Info'] = self.create_info(1,date)
+
+            self.df.to_csv(f"test{i}.csv",index=False)
+
+
+        return True
+    
+    def pro_6(self,date,**kwargs):
+        pro_6 = {"B1":[int(705.5 * 1e6),int(800 * 1e6),int(5000 * 1e3)],
+                 "B2":[int(826.5 * 1e6),int(831.5 * 1e6),int(836.5 * 1e6),
+                       int(871.5*1e6),int(876.5*1e6),int(881.5*1e6)],
+                 "B3":[int(892.5 * 1e6),int(897.5 * 1e6),int(902.5 * 1e6),
+                       int(907.5*1e6),int(912.5*1e6),int(937.5*1e6),
+                       int(942.5*1e6),int(947.5*1e6),int(952.5*1e6),
+                       int(957.5*1e6)]}
+        #set frequency 
+   
+        freq = kwargs.get('freq',[])
+
+        #process
+        i = 0
+        for k,v in pro_6.items():
+            #create new dataFrame every time
+            self.df = pd.DataFrame()
+            i += 1
+            if k == 'B2':
+                self.df['Frequency (Hz)'] = pro_6["B2"]
+                self.process(freq)
+                self.df['File Info'] = self.create_info(6,date)
+                self.df.to_csv(f"test{i}.csv",index=False)
+            elif k == 'B3':
+                self.df['Frequency (Hz)'] = pro_6["B3"]
+                self.process(freq)
+                self.df['File Info'] = self.create_info(6,date)
+                self.df.to_csv(f"test{i}.csv",index=False)
+            
+            else:
+                self.df['Frequency (Hz)'] = pd.Series(range(v[0], v[1] + v[2], v[2]))            
+                self.process(freq)
+                self.df['File Info'] = self.create_info(6,date)
+
+                self.df.to_csv(f"test{i}.csv",index=False)
+
+
+        return True
 
 
 
 pro = Pro()
 #print(pro.pro_1(230501,freq = None))
 
-pro.pro_2(230501,freq=None)
+pro.pro_6(230501,freq=None)
