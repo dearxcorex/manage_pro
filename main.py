@@ -4,13 +4,13 @@ from datetime import datetime
 
 
 
-from tabulate import tabulate
+
 
 class Pro:
     def __init__(self):
         self.df = pd.DataFrame() 
        
-
+    #detect frequency
     def process(self,freq):
         if freq is not None:
             freq = [ i * 1e6 for i in freq]
@@ -139,6 +139,7 @@ class Pro:
                 self.df['File Info'] = self.create_info(1,date)
 
                 self.df.to_csv(f"test{i}.csv",index=False)
+            
                 
 
     def pro_3(self,date,**kwargs):
