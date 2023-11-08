@@ -14,7 +14,7 @@ options = Options()
 options.add_experimental_option("detach", True)
 
 driver = webdriver.Chrome(options=options)
-driver.get("")
+driver.get("https://fmr.nbtc.go.th/")
 
 #find box id pass
 user  = driver.find_element(By.ID, "UserName")
@@ -25,9 +25,9 @@ click_login = driver.find_element(By.ID, "bLogin")
 
 
 #send id password  login
-user.send_keys("")
+user.send_keys("puvakrint.p")
 time.sleep(3)
-password.send_keys("")
+password.send_keys("Nbtc@2023!")
 time.sleep(3)
 click_login.click()
 
@@ -44,7 +44,7 @@ click_dms.click()
 #-------process all pro--------
 
 #upload file 
-relative_path = "fco_data"
+relative_path = "automate/fco_data"
 working_directory = os.getcwd()
 absolute_path = os.path.join(working_directory, relative_path)
 

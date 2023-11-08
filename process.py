@@ -3,33 +3,25 @@ from quantiphy import Quantity
 from datetime import datetime
 import random as rd
 
-
-class Pro:
+class Create:
     def __init__(self):
         self.df = pd.DataFrame()
 
-    # detect frequency
-    def process(self, freq):
+    def make_occ(self,freq):
         if freq is not None:
             freq = [i * 1e6 for i in freq]
 
             for v in freq:
-                self.df.loc[self.df['Frequency (Hz)']
-                            == v, 'Occupancy (%)'] = rd.randint(47, 67)
-                self.df.loc[~self.df['Frequency (Hz)'].isin(
-                    (freq)), 'Occupancy (%)'] = int(0)
+                self.df.loc[self.df['Frequency (Hz)']== v, 'Occupancy (%)'] = rd.randint(47, 67)
+                self.df.loc[~self.df['Frequency (Hz)'].isin((freq)), 'Occupancy (%)'] = int(0)
         else:
             self.df["Occupancy (%)"] = 0
 
-    def create_info(self, pro, date):
-        # get info
-
-        df_info = pd.read_csv("ref_data/pro_9.csv",
-                              usecols=["File Info"], encoding="ISO-8859-1")
+    def create_info(self,pro,date):
+        df_info = pd.read_csv("ref_data/pro_9.csv",usecols=["File Info"], encoding="ISO-8859-1")
 
         # data
-        df_info.loc[0,
-                    'File Info'] = f"File Name:pro_{pro}_1_000002_{date}_0101_OC"
+        df_info.loc[0,'File Info'] = f"File Name:pro_{pro}_1_000002_{date}_0101_OC"
         # records
         records = len(self.df['Frequency (Hz)'])
         df_info.loc[3, 'File Info'] = f'Records:{records}'
@@ -37,10 +29,8 @@ class Pro:
         # date
         days_to_add = str(date)
         datetime_obj = datetime.strptime(days_to_add, "%y%m%d")
-        df_info.loc[4,
-                    'File Info'] = f"Created At:{datetime_obj.date()} 11:38:17"
-        df_info.loc[5,
-                    'File Info'] = f"Modified At:{datetime_obj.date()} 11:38:17"
+        df_info.loc[4,'File Info'] = f"Created At:{datetime_obj.date()} 11:38:17"
+        df_info.loc[5,'File Info'] = f"Modified At:{datetime_obj.date()} 11:38:17"
 
         # fix min max  frequency
         set_min_freq = str(self.df['Frequency (Hz)'].min())
@@ -53,14 +43,14 @@ class Pro:
         df_info.loc[14, 'File Info'] = f"Minimum Frequency:{max_freq} "
 
         # fix Measurement Result and   Measurement Unit
-        df_info.loc[16,
-                    'File Info'] = f"Measurement Result: pro_{pro}_1_000002_{date}_0101 "
+        df_info.loc[16,'File Info'] = f"Measurement Result: pro_{pro}_1_000002_{date}_0101 "
 
         # min max convert to Hz
         df_info.loc[20, 'File Info'] = f" Minimum Frequency:{set_min_freq} Hz"
         df_info.loc[21, 'File Info'] = f" Minimum Frequency:{set_max_freq} Hz"
 
         return df_info
+    
 
     def pro_1(self, date, **kwargs):
 
@@ -75,21 +65,22 @@ class Pro:
         # set frequency
         freq = kwargs.get('freq', [])
 
-        # process
+
+           # process
         i = 0
         for k, v in pro_1.items():
             # create new dataFrame every time
             self.df = pd.DataFrame()
             i += 1
             # self.df['Frequency (Hz)'] = pd.Series(range(pro_1['start'],pro_1['stop']+ pro_1['step'],pro_1['step']))
-            self.df['Frequency (Hz)'] = pd.Series(
-                range(v[0], v[1] + v[2], v[2]))
-            self.process(freq)
+            self.df['Frequency (Hz)'] = pd.Series(range(v[0], v[1] + v[2], v[2]))
+            self.make_occ(freq)
             self.df['File Info'] = self.create_info(1, date)
 
             self.df.to_csv(f"pro_1_{i}.csv", index=False)
 
         return True
+    
 
     def pro_2(self, date, **kwargs):
         # set data
@@ -376,113 +367,114 @@ class Pro:
         return True
 
 
-pro = Pro()
-# print(pro.pro_1(230501,freq = None))
-'''
-pro.pro_2(230802, freq=[120.95, 121.1, 124.35, 131.5, 133.1, 122.35, 128.1, 128.95, 135.5, 123.4, 123.6, 124.5, 125.2, 126.5, 144.3875,
-                        144.4625,
-                        144.625,
-                        145.0875,
-                        145.1,
-                        145.275,
-                        145.375,
-                        145.6875,
-                        145.7,
-                        146.25,
-                        144.825,
-                        144.875,
-                        144.975,
-                        144.525,
-                        144.675,
-                        145.225,
-                        145.2625,
-                        145.45,
-                        144.55,
-                        144.65,
-                        144.7,
-                        144.75,
-                        144.85,
-                        145.2,
-                        145.325,
-                        145.475,
-                        145.75,
-                        144.5875,
-                        144.775,
-                        145.3,
-                        144.5375,
-                        145.7125,
-                        145.05,
-                        144.05,
-                        144.95,
-                        145.0375,
-                        145.075,
-                        145.35,
-                        145.675,
-                        151.8,
-                        155.775,
-                        152.625,
-                        151.7,
-                        152.85,
-                        154.45,
-                        154.575,
-                        155.15,
-                        155.725,
-                        159.3,
-                        148.45,
-                        152.475,
-                        153.475,
-                        154.425,
-                        159.3125,
-                        152.6,
-                        153.2,
-                        147.15,
-                        152.65,
-                        154.6375,
-                        154.925,
-                        155.4,
-                        155.825,
-                        155.975,
-                        159.325,
-                        147.825,
-                        147.975,
-                        149.775,
-                        151.7125,
-                        153.55,
-                        154.5375,
-                        154.5625,
-                        154.7,
-                        154.75,
-                        154.775,
-                        159.2875,
-                        168.475,
-                        168.875,
-                        173.475,
-                        171,
-                        171.35,
-                        171.375,
-                        172.8,
-                        173.025,
-                        170,
-                        162.75,
-                        165.4,
-                        161.225,
-                        162.225,
-                        162.125,
-                        165.35,
-                        171.3625,
-                        168.775,
-                        168.8875,
-                        168.95,
-                        171.0125,
-                        171.1875,
-                        171.3,
-                        171.5625,
-                        171.7125,
-                        172.0125,
-                        172.5125,
-                        172.5375,
-                        173.2125,
-                        173.7375,])
+run = Create()
+
+#pro_1
+run.pro_1(230801, freq=None)
+# run.pro_2(230802, freq=[120.95, 121.1, 124.35, 131.5, 133.1, 122.35, 128.1, 128.95, 135.5, 123.4, 123.6, 124.5, 125.2, 126.5, 144.3875,
+#                         144.4625,
+#                         144.625,
+#                         145.0875,
+#                         145.1,
+#                         145.275,
+#                         145.375,
+#                         145.6875,
+#                         145.7,
+#                         146.25,
+#                         144.825,
+#                         144.875,
+#                         144.975,
+#                         144.525,
+#                         144.675,
+#                         145.225,
+#                         145.2625,
+#                         145.45,
+#                         144.55,
+#                         144.65,
+#                         144.7,
+#                         144.75,
+#                         144.85,
+#                         145.2,
+#                         145.325,
+#                         145.475,
+#                         145.75,
+#                         144.5875,
+#                         144.775,
+#                         145.3,
+#                         144.5375,
+#                         145.7125,
+#                         145.05,
+#                         144.05,
+#                         144.95,
+#                         145.0375,
+#                         145.075,
+#                         145.35,
+#                         145.675,
+#                         151.8,
+#                         155.775,
+#                         152.625,
+#                         151.7,
+#                         152.85,
+#                         154.45,
+#                         154.575,
+#                         155.15,
+#                         155.725,
+#                         159.3,
+#                         148.45,
+#                         152.475,
+#                         153.475,
+#                         154.425,
+#                         159.3125,
+#                         152.6,
+#                         153.2,
+#                         147.15,
+#                         152.65,
+#                         154.6375,
+#                         154.925,
+#                         155.4,
+#                         155.825,
+#                         155.975,
+#                         159.325,
+#                         147.825,
+#                         147.975,
+#                         149.775,
+#                         151.7125,
+#                         153.55,
+#                         154.5375,
+#                         154.5625,
+#                         154.7,
+#                         154.75,
+#                         154.775,
+#                         159.2875,
+#                         168.475,
+#                         168.875,
+#                         173.475,
+#                         171,
+#                         171.35,
+#                         171.375,
+#                         172.8,
+#                         173.025,
+#                         170,
+#                         162.75,
+#                         165.4,
+#                         161.225,
+#                         162.225,
+#                         162.125,
+#                         165.35,
+#                         171.3625,
+#                         168.775,
+#                         168.8875,
+#                         168.95,
+#                         171.0125,
+#                         171.1875,
+#                         171.3,
+#                         171.5625,
+#                         171.7125,
+#                         172.0125,
+#                         172.5125,
+#                         172.5375,
+#                         173.2125,
+#                         173.7375,])
 '''
 # pro.pro_3(230803, freq=[245,
 #                         238.875,
@@ -592,3 +584,4 @@ pro.pro_6(230806, freq=[770.5,
                         864,
                         869,
                         ])
+'''
