@@ -8,13 +8,13 @@ class Create:
     def __init__(self):
         self.df = pd.DataFrame()
 
-    def make_occ(self, freq):
+    def make_occ(self, freq,num1=0,num2=0):
         if freq is not None:
             freq = [i * 1e6 for i in freq]
 
             for v in freq:
                 self.df.loc[self.df['Frequency (Hz)'] == v, 'Occupancy (%)'] = rd.randint(
-                    48, 80)
+                    num1, num2)
                 self.df.loc[~self.df['Frequency (Hz)'].isin(
                     (freq)), 'Occupancy (%)'] = int(0)
         else:
@@ -59,7 +59,7 @@ class Create:
 
         return df_info
 
-    def pro_1(self, date, **kwargs):
+    def pro_1(self, date,num1,num2, **kwargs):
 
         # set data
         pro_1 = {"B1": [int(30 * 1e6), int(47 * 1e6), int(25 * 1e3)],
@@ -81,14 +81,14 @@ class Create:
             # self.df['Frequency (Hz)'] = pd.Series(range(pro_1['start'],pro_1['stop']+ pro_1['step'],pro_1['step']))
             self.df['Frequency (Hz)'] = pd.Series(
                 range(v[0], v[1] + v[2], v[2]))
-            self.make_occ(freq)
+            self.make_occ(freq,num1,num2)
             self.df['File Info'] = self.create_info(1, date)
 
             self.df.to_csv(f"automate/fco_data/pro_1_{i}.csv", index=False)
 
         return True
 
-    def pro_2(self, date, **kwargs):
+    def pro_2(self, date,num1,num2, **kwargs):
         # set data
         pro_2 = {"B1": [int(108 * 1e6), int(118 * 1e6), int(50 * 1e3)],
                  "B2": [int(118 * 1e6), int(137 * 1e6), int(25 * 1e3)],
@@ -128,7 +128,7 @@ class Create:
             # add frequency_list
             if k == "B6":
                 self.df['Frequency (Hz)'] = pro_2["B6"]
-                self.make_occ(freq)
+                self.make_occ(freq,num1,num2)
                 self.df['File Info'] = self.create_info(1, date)
 
                 self.df.to_csv(f"automate/fco_data/pro_2_{i}.csv", index=False)
@@ -136,14 +136,14 @@ class Create:
             else:
                 self.df['Frequency (Hz)'] = pd.Series(
                     range(v[0], v[1] + v[2], v[2]))
-                self.make_occ(freq)
+                self.make_occ(freq,num1,num2)
                 self.df['File Info'] = self.create_info(1, date)
 
                 self.df.to_csv(f"automate/fco_data/pro_2_{i}.csv", index=False)
 
         return True
 
-    def pro_3(self, date, **kwargs):
+    def pro_3(self, date,num1,num2, **kwargs):
 
         pro_3 = {"B1": [int(230 * 1e6), int(245 * 1e6), int(25 * 1e3)],
                  "B2": [int(247 * 1e6), int(300 * 1e6), int(25 * 1e3)],
@@ -164,14 +164,14 @@ class Create:
             i += 1
             self.df['Frequency (Hz)'] = pd.Series(
                 range(v[0], v[1] + v[2], v[2]))
-            self.make_occ(freq)
+            self.make_occ(freq,num1,num2)
             self.df['File Info'] = self.create_info(1, date)
 
             self.df.to_csv(f"automate/fco_data/pro_3_{i}.csv", index=False)
 
         return True
 
-    def pro_4(self, date, **kwargs):
+    def pro_4(self, date,num1,num2, **kwargs):
         pro_4 = {"B1": [int(380 * 1e6), int(430 * 1e6), int(12.5 * 1e3)]}
         # set frequency
         freq = kwargs.get('freq', [])
@@ -184,14 +184,14 @@ class Create:
             i += 1
             self.df['Frequency (Hz)'] = pd.Series(
                 range(v[0], v[1] + v[2], v[2]))
-            self.make_occ(freq)
+            self.make_occ(freq,num1,num2)
             self.df['File Info'] = self.create_info(1, date)
 
             self.df.to_csv(f"automate/fco_data/pro_4_{i}.csv", index=False)
 
         return True
 
-    def pro_5(self, date, **kwargs):
+    def pro_5(self, date,num1,num2, **kwargs):
         pro_5 = {"B1": [int(430 * 1e6), int(470 * 1e6), int(25 * 1e3)]}
         # set frequency
         freq = kwargs.get('freq', [])
@@ -204,14 +204,14 @@ class Create:
             i += 1
             self.df['Frequency (Hz)'] = pd.Series(
                 range(v[0], v[1] + v[2], v[2]))
-            self.make_occ(freq)
+            self.make_occ(freq,num1,num2)
             self.df['File Info'] = self.create_info(1, date)
 
             self.df.to_csv(f"automate/fco_data/pro_5_{i}.csv", index=False)
 
         return True
 
-    def pro_6(self, date, **kwargs):
+    def pro_6(self, date,num1,num2, **kwargs):
         pro_6 = {"B1": [int(705.5 * 1e6), int(800 * 1e6), int(5000 * 1e3)],
                  "B2": [int(826.5 * 1e6), int(831.5 * 1e6), int(836.5 * 1e6),
                         int(871.5*1e6), int(876.5*1e6), int(881.5*1e6)],
@@ -231,26 +231,26 @@ class Create:
             i += 1
             if k == 'B2':
                 self.df['Frequency (Hz)'] = pro_6["B2"]
-                self.make_occ(freq)
+                self.make_occ(freq,num1,num2)
                 self.df['File Info'] = self.create_info(6, date)
-                self.df.to_csv(f"automate/fco_data/pro_6{i}.csv", index=False)
+                self.df.to_csv(f"automate/fco_data/pro_6_{i}.csv", index=False)
             elif k == 'B3':
                 self.df['Frequency (Hz)'] = pro_6["B3"]
-                self.make_occ(freq)
+                self.make_occ(freq,num1,num2)
                 self.df['File Info'] = self.create_info(6, date)
-                self.df.to_csv(f"automate/fco_data/pro_6{i}.csv", index=False)
+                self.df.to_csv(f"automate/fco_data/pro_6_{i}.csv", index=False)
 
             else:
                 self.df['Frequency (Hz)'] = pd.Series(
                     range(v[0], v[1] + v[2], v[2]))
-                self.make_occ(freq)
+                self.make_occ(freq,num1,num2)
                 self.df['File Info'] = self.create_info(6, date)
 
-                self.df.to_csv(f"automate/fco_data/pro_6{i}.csv", index=False)
+                self.df.to_csv(f"automate/fco_data/pro_6_{i}.csv", index=False)
 
         return True
 
-    def pro_7(self, date, **kwargs):
+    def pro_7(self, date,num1,num2, **kwargs):
         pro_7 = {"B1": [int(839 * 1e6), int(851 * 1e6), int(25 * 1e3)],
                  "B2": [int(884 * 1e6), int(890 * 1e6), int(25 * 1e3)],
                  "B4": [int(930 * 1e6), int(935 * 1e6), int(25 * 1e3)], }
@@ -267,14 +267,14 @@ class Create:
             # self.df['Frequency (Hz)'] = pd.Series(range(pro_1['start'],pro_1['stop']+ pro_1['step'],pro_1['step']))
             self.df['Frequency (Hz)'] = pd.Series(
                 range(v[0], v[1] + v[2], v[2]))
-            self.make_occ(freq)
+            self.make_occ(freq,num1,num2)
             self.df['File Info'] = self.create_info(1, date)
 
             self.df.to_csv(f"automate/fco_data/pro_7_{i}.csv", index=False)
 
         return True
 
-    def pro_8(self, date, **kwargs):
+    def pro_8(self, date,num1,num2, **kwargs):
         pro_8 = {"B2": [int(1215 * 1e6), int(1427 * 1e6), int(250 * 1e3)],
                  }
         # set frequency
@@ -289,14 +289,14 @@ class Create:
             # self.df['Frequency (Hz)'] = pd.Series(range(pro_1['start'],pro_1['stop']+ pro_1['step'],pro_1['step']))
             self.df['Frequency (Hz)'] = pd.Series(
                 range(v[0], v[1] + v[2], v[2]))
-            self.make_occ(freq)
+            self.make_occ(freq,num1,num2)
             self.df['File Info'] = self.create_info(1, date)
 
             self.df.to_csv(f"automate/fco_data/pro_8_{i}.csv", index=False)
 
         return True
 
-    def pro_9(self, date, **kwargs):
+    def pro_9(self, date,num1,num2, **kwargs):
         pro_9 = {"B1": [int(1712.5 * 1e6), int(1842.5 * 1e6), int(5 * 1e6)],
                  "B3": [int(1922.5 * 1e6), int(2167.5 * 1e6), int(5 * 1e6)],
                  "B5": [int(2312.5 * 1e6), int(2687.5 * 1e6), int(5 * 1e6)],
@@ -313,14 +313,14 @@ class Create:
             # self.df['Frequency (Hz)'] = pd.Series(range(pro_1['start'],pro_1['stop']+ pro_1['step'],pro_1['step']))
             self.df['Frequency (Hz)'] = pd.Series(
                 range(v[0], v[1] + v[2], v[2]))
-            self.make_occ(freq)
+            self.make_occ(freq,num1,num2)
             self.df['File Info'] = self.create_info(1, date)
 
             self.df.to_csv(f"automate/fco_data/pro_9_{i}.csv", index=False)
 
         return True
 
-    def pro_10(self, date, **kwargs):
+    def pro_10(self, date,num1,num2, **kwargs):
         pro_10 = {"B1": [int(1750 * 1e6), int(1805 * 1e6), int(250 * 1e3)],
                   "B3": [int(1845 * 1e6), int(1920 * 1e6), int(250 * 1e3)],
                   "B5": [int(1980 * 1e6), int(2025 * 1e6), int(250 * 1e3)],
@@ -339,14 +339,14 @@ class Create:
             # self.df['Frequency (Hz)'] = pd.Series(range(pro_1['start'],pro_1['stop']+ pro_1['step'],pro_1['step']))
             self.df['Frequency (Hz)'] = pd.Series(
                 range(v[0], v[1] + v[2], v[2]))
-            self.make_occ(freq)
+            self.make_occ(freq,num1,num2)
             self.df['File Info'] = self.create_info(1, date)
 
             self.df.to_csv(f"automate/fco_data/pro_10_{i}.csv", index=False)
 
         return True
 
-    def pro_11(self, date, **kwargs):
+    def pro_11(self, date,num1,num2, **kwargs):
         pro_11 = {"B2": [int(2053.5 * 1e6), int(2060 * 1e6), int(250 * 1e3)],
                   "B6": [int(2170 * 1e6), int(2200.5 * 1e6), int(250 * 1e3)],
                   "B8": [int(2228.5 * 1e6), int(2230 * 1e6), int(250 * 1e3)],
@@ -365,17 +365,15 @@ class Create:
             # self.df['Frequency (Hz)'] = pd.Series(range(pro_1['start'],pro_1['stop']+ pro_1['step'],pro_1['step']))
             self.df['Frequency (Hz)'] = pd.Series(
                 range(v[0], v[1] + v[2], v[2]))
-            self.process(freq)
+            self.make_occ(freq,num1,num2)
             self.df['File Info'] = self.create_info(1, date)
 
             self.df.to_csv(f"automate/fco_data/pro_11_{i}.csv", index=False)
 
         return True
 
-
 run = Create()
 
-# pro_1
 # run.pro_1(230801, freq=None)
 # run.pro_2(231012, freq=[120.95, 121.1, 124.35, 131.5, 133.1, 122.35, 128.1, 128.95, 135.5, 123.4, 123.6, 124.5, 125.2, 126.5, 144.3875,
 #                         144.4625,
@@ -543,4 +541,4 @@ run = Create()
 #           2112.5, 2117.5, 2122.5, 2127.5, 2142.5, 2152.5, 2322.5, 2332.5, 2342.5, 2362.5, 2532.5, 2557.5])
 
 
-run.pro_10(231020, freq=None)
+# run.pro_10(231020, freq=None)

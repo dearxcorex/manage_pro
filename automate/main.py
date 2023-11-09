@@ -1,79 +1,93 @@
 import os
 from selenium import webdriver
-from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.by import By
-
-
 from selenium.webdriver.chrome.options import Options
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.common.exceptions import TimeoutException
 
 
-import time
-options = Options()
-options.add_experimental_option("detach", True)
+class NBTC_Automation:
+    def __init__(self, username, password):
+        self.username = username
+        self.password = password
+        self.driver = self.initialize_driver()
+        self.login_url = "https://fmr.nbtc.go.th/"
+        self.relative_path = "automate/fco_data"
+        self.working_directory = os.getcwd()
+        self.absolute_path = os.path.join(
+            self.working_directory, self.relative_path)
 
-driver = webdriver.Chrome(options=options)
-driver.get("https://fmr.nbtc.go.th/")
+    def initialize_driver(self):
+        options = Options()
+        options.add_experimental_option("detach", True)
+        driver = webdriver.Chrome(options=options)
+        return driver
 
-# find box id pass
-user = driver.find_element(By.ID, "UserName")
-password = driver.find_element(By.ID, "Password")
+    def login(self):
+        self.driver.get(self.login_url)
+        user_input = self.driver.find_element(By.ID, "UserName")
+        password_input = self.driver.find_element(By.ID, "Password")
+        login_button = self.driver.find_element(By.ID, "bLogin")
 
-# login
-click_login = driver.find_element(By.ID, "bLogin")
+        user_input.send_keys(self.username)
+        password_input.send_keys(self.password)
+        login_button.click()
+
+    def navigate_to_dms(self):
+        try:
+            click_dms = WebDriverWait(self.driver, 10).until(
+                EC.element_to_be_clickable(
+                    (By.XPATH, "/html/body/div/div/div/div[2]/a"))
+            )
+            click_dms.click()
+        except TimeoutException:
+            print("DMS link was not available within the given time.")
+
+    def upload_files(self):
+        for file_name in os.listdir(self.absolute_path):
+            file_path = os.path.join(self.absolute_path, file_name)
+            self.upload_file(file_path)
+            self.save_file()
+            self.confirm_upload()
+
+    def upload_file(self, file_path):
+        WebDriverWait(self.driver, 20).until(
+            EC.element_to_be_clickable((By.ID, "menu_station214708")))
+        monitoring_system = self.driver.find_element(
+            By.ID, "menu_station214708")
+        monitoring_system.click()
+
+        upload_field = self.driver.find_element(By.ID, "File1")
+        upload_field.send_keys(file_path)
+
+        preview_button = self.driver.find_element(By.ID, "bPreview")
+        preview_button.click()
+
+    def save_file(self):
+        save_button = WebDriverWait(self.driver, 10).until(
+            EC.element_to_be_clickable((By.ID, "bSave"))
+        )
+        save_button.click()
+
+    def confirm_upload(self):
+        done_button = WebDriverWait(self.driver, 20).until(
+            EC.element_to_be_clickable(
+                (By.XPATH, "/html/body/div[4]/div/div[10]/button[1]"))
+        )
+        done_button.click()
+
+    def run(self):
+        self.login()
+        self.navigate_to_dms()
+        self.upload_files()
+
+    def close(self):
+        self.driver.quit()
 
 
-# send id password  login
-user.send_keys("thanyapat.p")
-time.sleep(3)
-password.send_keys("Adar@Sujinan162636")
-time.sleep(3)
-click_login.click()
-
-# #click dms
-
-click_dms = driver.find_element(By.XPATH, "/html/body/div/div/div/div[2]/a")
-
-time.sleep(3)
-click_dms.click()
-
-
-# -------process all pro--------
-
-# upload file
-relative_path = "automate/fco_data"
-working_directory = os.getcwd()
-absolute_path = os.path.join(working_directory, relative_path)
-
-for file_name in os.listdir(absolute_path):
-    # choose Monitoring system
-    WebDriverWait(driver, 20).until(EC.element_to_be_clickable(
-        (By.XPATH, "//a[@id='menu_station214708']")))
-    monitoring_sysytem = driver.find_element(
-        By.XPATH, "//a[@id='menu_station214708']")
-    monitoring_sysytem.click()
-    print(" Pick  ภภ.เขต 23 - A-23-nakhon ratchasima (Remote Station)")
-
-    file_path = os.path.join(absolute_path, file_name)
-
-    upload_file = driver.find_element(By.ID, "File1")
-    upload_file.send_keys(f"{file_path}")
-    print(f'upload: { file_path}')
-    # Click Preview
-    click_preview = driver.find_element(By.XPATH, "//input[@id='bPreview']")
-    time.sleep(3)
-    click_preview.click()
-    print("Click Preview")
-    # click Save
-    click_save = driver.find_element(By.XPATH, "//input[@id='bSave']")
-    click_save.click()
-    print("Click Save")
-
-    # click done
-    WebDriverWait(driver, 20).until(EC.element_to_be_clickable(
-        (By.XPATH, "/html/body/div[4]/div/div[10]/button[1]")))
-    click_done = driver.find_element(
-        By.XPATH, "/html/body/div[4]/div/div[10]/button[1]")
-    click_done.click()
-    print("Click Done ")
+if __name__ == "__main__":
+    automation = NBTC_Automation("tossakun.y", "022135Bon!")
+    automation.run()
+    # Consider uncommenting the line below if you want to close the browser automatically after the run.
+    automation.close()
