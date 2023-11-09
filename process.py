@@ -3,25 +3,30 @@ from quantiphy import Quantity
 from datetime import datetime
 import random as rd
 
+
 class Create:
     def __init__(self):
         self.df = pd.DataFrame()
 
-    def make_occ(self,freq):
+    def make_occ(self, freq):
         if freq is not None:
             freq = [i * 1e6 for i in freq]
 
             for v in freq:
-                self.df.loc[self.df['Frequency (Hz)']== v, 'Occupancy (%)'] = rd.randint(47, 67)
-                self.df.loc[~self.df['Frequency (Hz)'].isin((freq)), 'Occupancy (%)'] = int(0)
+                self.df.loc[self.df['Frequency (Hz)'] == v, 'Occupancy (%)'] = rd.randint(
+                    48, 80)
+                self.df.loc[~self.df['Frequency (Hz)'].isin(
+                    (freq)), 'Occupancy (%)'] = int(0)
         else:
             self.df["Occupancy (%)"] = 0
 
-    def create_info(self,pro,date):
-        df_info = pd.read_csv("ref_data/pro_9.csv",usecols=["File Info"], encoding="ISO-8859-1")
+    def create_info(self, pro, date):
+        df_info = pd.read_csv("ref_data/pro_9.csv",
+                              usecols=["File Info"], encoding="ISO-8859-1")
 
         # data
-        df_info.loc[0,'File Info'] = f"File Name:pro_{pro}_1_000002_{date}_0101_OC"
+        df_info.loc[0,
+                    'File Info'] = f"File Name:pro_{pro}_1_000002_{date}_0101_OC"
         # records
         records = len(self.df['Frequency (Hz)'])
         df_info.loc[3, 'File Info'] = f'Records:{records}'
@@ -29,8 +34,10 @@ class Create:
         # date
         days_to_add = str(date)
         datetime_obj = datetime.strptime(days_to_add, "%y%m%d")
-        df_info.loc[4,'File Info'] = f"Created At:{datetime_obj.date()} 11:38:17"
-        df_info.loc[5,'File Info'] = f"Modified At:{datetime_obj.date()} 11:38:17"
+        df_info.loc[4,
+                    'File Info'] = f"Created At:{datetime_obj.date()} 11:38:17"
+        df_info.loc[5,
+                    'File Info'] = f"Modified At:{datetime_obj.date()} 11:38:17"
 
         # fix min max  frequency
         set_min_freq = str(self.df['Frequency (Hz)'].min())
@@ -43,14 +50,14 @@ class Create:
         df_info.loc[14, 'File Info'] = f"Minimum Frequency:{max_freq} "
 
         # fix Measurement Result and   Measurement Unit
-        df_info.loc[16,'File Info'] = f"Measurement Result: pro_{pro}_1_000002_{date}_0101 "
+        df_info.loc[16,
+                    'File Info'] = f"Measurement Result: pro_{pro}_1_000002_{date}_0101 "
 
         # min max convert to Hz
         df_info.loc[20, 'File Info'] = f" Minimum Frequency:{set_min_freq} Hz"
         df_info.loc[21, 'File Info'] = f" Minimum Frequency:{set_max_freq} Hz"
 
         return df_info
-    
 
     def pro_1(self, date, **kwargs):
 
@@ -65,22 +72,21 @@ class Create:
         # set frequency
         freq = kwargs.get('freq', [])
 
-
-           # process
+        # process
         i = 0
         for k, v in pro_1.items():
             # create new dataFrame every time
             self.df = pd.DataFrame()
             i += 1
             # self.df['Frequency (Hz)'] = pd.Series(range(pro_1['start'],pro_1['stop']+ pro_1['step'],pro_1['step']))
-            self.df['Frequency (Hz)'] = pd.Series(range(v[0], v[1] + v[2], v[2]))
+            self.df['Frequency (Hz)'] = pd.Series(
+                range(v[0], v[1] + v[2], v[2]))
             self.make_occ(freq)
             self.df['File Info'] = self.create_info(1, date)
 
-            self.df.to_csv(f"pro_1_{i}.csv", index=False)
+            self.df.to_csv(f"automate/fco_data/pro_1_{i}.csv", index=False)
 
         return True
-    
 
     def pro_2(self, date, **kwargs):
         # set data
@@ -122,18 +128,18 @@ class Create:
             # add frequency_list
             if k == "B6":
                 self.df['Frequency (Hz)'] = pro_2["B6"]
-                self.process(freq)
+                self.make_occ(freq)
                 self.df['File Info'] = self.create_info(1, date)
 
-                self.df.to_csv(f"pro_2_{i}.csv", index=False)
+                self.df.to_csv(f"automate/fco_data/pro_2_{i}.csv", index=False)
 
             else:
                 self.df['Frequency (Hz)'] = pd.Series(
                     range(v[0], v[1] + v[2], v[2]))
-                self.process(freq)
+                self.make_occ(freq)
                 self.df['File Info'] = self.create_info(1, date)
 
-                self.df.to_csv(f"pro_2_{i}.csv", index=False)
+                self.df.to_csv(f"automate/fco_data/pro_2_{i}.csv", index=False)
 
         return True
 
@@ -158,15 +164,15 @@ class Create:
             i += 1
             self.df['Frequency (Hz)'] = pd.Series(
                 range(v[0], v[1] + v[2], v[2]))
-            self.process(freq)
+            self.make_occ(freq)
             self.df['File Info'] = self.create_info(1, date)
 
-            self.df.to_csv(f"pro_3{i}.csv", index=False)
+            self.df.to_csv(f"automate/fco_data/pro_3_{i}.csv", index=False)
 
         return True
 
     def pro_4(self, date, **kwargs):
-        pro_4 = {"B1": [int(380.00625 * 1e6), int(430 * 1e6), int(12.5 * 1e3)]}
+        pro_4 = {"B1": [int(380 * 1e6), int(430 * 1e6), int(12.5 * 1e3)]}
         # set frequency
         freq = kwargs.get('freq', [])
 
@@ -178,10 +184,10 @@ class Create:
             i += 1
             self.df['Frequency (Hz)'] = pd.Series(
                 range(v[0], v[1] + v[2], v[2]))
-            self.process(freq)
+            self.make_occ(freq)
             self.df['File Info'] = self.create_info(1, date)
 
-            self.df.to_csv(f"pro_4{i}.csv", index=False)
+            self.df.to_csv(f"automate/fco_data/pro_4_{i}.csv", index=False)
 
         return True
 
@@ -198,10 +204,10 @@ class Create:
             i += 1
             self.df['Frequency (Hz)'] = pd.Series(
                 range(v[0], v[1] + v[2], v[2]))
-            self.process(freq)
+            self.make_occ(freq)
             self.df['File Info'] = self.create_info(1, date)
 
-            self.df.to_csv(f"pro_5_5{i}.csv", index=False)
+            self.df.to_csv(f"automate/fco_data/pro_5_{i}.csv", index=False)
 
         return True
 
@@ -225,22 +231,22 @@ class Create:
             i += 1
             if k == 'B2':
                 self.df['Frequency (Hz)'] = pro_6["B2"]
-                self.process(freq)
+                self.make_occ(freq)
                 self.df['File Info'] = self.create_info(6, date)
-                self.df.to_csv(f"pro_6_6{i}.csv", index=False)
+                self.df.to_csv(f"automate/fco_data/pro_6{i}.csv", index=False)
             elif k == 'B3':
                 self.df['Frequency (Hz)'] = pro_6["B3"]
-                self.process(freq)
+                self.make_occ(freq)
                 self.df['File Info'] = self.create_info(6, date)
-                self.df.to_csv(f"pro_6_6{i}.csv", index=False)
+                self.df.to_csv(f"automate/fco_data/pro_6{i}.csv", index=False)
 
             else:
                 self.df['Frequency (Hz)'] = pd.Series(
                     range(v[0], v[1] + v[2], v[2]))
-                self.process(freq)
+                self.make_occ(freq)
                 self.df['File Info'] = self.create_info(6, date)
 
-                self.df.to_csv(f"pro_6_6{i}.csv", index=False)
+                self.df.to_csv(f"automate/fco_data/pro_6{i}.csv", index=False)
 
         return True
 
@@ -261,10 +267,10 @@ class Create:
             # self.df['Frequency (Hz)'] = pd.Series(range(pro_1['start'],pro_1['stop']+ pro_1['step'],pro_1['step']))
             self.df['Frequency (Hz)'] = pd.Series(
                 range(v[0], v[1] + v[2], v[2]))
-            self.process(freq)
+            self.make_occ(freq)
             self.df['File Info'] = self.create_info(1, date)
 
-            self.df.to_csv(f"pro_7_{i}.csv", index=False)
+            self.df.to_csv(f"automate/fco_data/pro_7_{i}.csv", index=False)
 
         return True
 
@@ -283,10 +289,10 @@ class Create:
             # self.df['Frequency (Hz)'] = pd.Series(range(pro_1['start'],pro_1['stop']+ pro_1['step'],pro_1['step']))
             self.df['Frequency (Hz)'] = pd.Series(
                 range(v[0], v[1] + v[2], v[2]))
-            self.process(freq)
+            self.make_occ(freq)
             self.df['File Info'] = self.create_info(1, date)
 
-            self.df.to_csv(f"pro_8_{i}.csv", index=False)
+            self.df.to_csv(f"automate/fco_data/pro_8_{i}.csv", index=False)
 
         return True
 
@@ -307,10 +313,10 @@ class Create:
             # self.df['Frequency (Hz)'] = pd.Series(range(pro_1['start'],pro_1['stop']+ pro_1['step'],pro_1['step']))
             self.df['Frequency (Hz)'] = pd.Series(
                 range(v[0], v[1] + v[2], v[2]))
-            self.process(freq)
+            self.make_occ(freq)
             self.df['File Info'] = self.create_info(1, date)
 
-            self.df.to_csv(f"pro_9_{i}.csv", index=False)
+            self.df.to_csv(f"automate/fco_data/pro_9_{i}.csv", index=False)
 
         return True
 
@@ -333,10 +339,10 @@ class Create:
             # self.df['Frequency (Hz)'] = pd.Series(range(pro_1['start'],pro_1['stop']+ pro_1['step'],pro_1['step']))
             self.df['Frequency (Hz)'] = pd.Series(
                 range(v[0], v[1] + v[2], v[2]))
-            self.process(freq)
+            self.make_occ(freq)
             self.df['File Info'] = self.create_info(1, date)
 
-            self.df.to_csv(f"pro_10_{i}.csv", index=False)
+            self.df.to_csv(f"automate/fco_data/pro_10_{i}.csv", index=False)
 
         return True
 
@@ -362,16 +368,16 @@ class Create:
             self.process(freq)
             self.df['File Info'] = self.create_info(1, date)
 
-            self.df.to_csv(f"pro_11_{i}.csv", index=False)
+            self.df.to_csv(f"automate/fco_data/pro_11_{i}.csv", index=False)
 
         return True
 
 
 run = Create()
 
-#pro_1
-run.pro_1(230801, freq=None)
-# run.pro_2(230802, freq=[120.95, 121.1, 124.35, 131.5, 133.1, 122.35, 128.1, 128.95, 135.5, 123.4, 123.6, 124.5, 125.2, 126.5, 144.3875,
+# pro_1
+# run.pro_1(230801, freq=None)
+# run.pro_2(231012, freq=[120.95, 121.1, 124.35, 131.5, 133.1, 122.35, 128.1, 128.95, 135.5, 123.4, 123.6, 124.5, 125.2, 126.5, 144.3875,
 #                         144.4625,
 #                         144.625,
 #                         145.0875,
@@ -403,13 +409,6 @@ run.pro_1(230801, freq=None)
 #                         145.3,
 #                         144.5375,
 #                         145.7125,
-#                         145.05,
-#                         144.05,
-#                         144.95,
-#                         145.0375,
-#                         145.075,
-#                         145.35,
-#                         145.675,
 #                         151.8,
 #                         155.775,
 #                         152.625,
@@ -436,15 +435,7 @@ run.pro_1(230801, freq=None)
 #                         155.975,
 #                         159.325,
 #                         147.825,
-#                         147.975,
-#                         149.775,
-#                         151.7125,
-#                         153.55,
 #                         154.5375,
-#                         154.5625,
-#                         154.7,
-#                         154.75,
-#                         154.775,
 #                         159.2875,
 #                         168.475,
 #                         168.875,
@@ -463,72 +454,20 @@ run.pro_1(230801, freq=None)
 #                         165.35,
 #                         171.3625,
 #                         168.775,
-#                         168.8875,
 #                         168.95,
 #                         171.0125,
-#                         171.1875,
-#                         171.3,
-#                         171.5625,
-#                         171.7125,
-#                         172.0125,
-#                         172.5125,
-#                         172.5375,
-#                         173.2125,
 #                         173.7375,])
-'''
-# pro.pro_3(230803, freq=[245,
-#                         238.875,
-#                         240.5,
-#                         324,
+
+# run.pro_3(231013, freq=[245,
 #                         340.5,
 #                         348.84])
 
-# pro.pro_4(230804, freq=[390.45,
+# run.pro_4(231014, freq=[390.45,
 #                         390.7,
+#                         391.7,
 #                         391.45,
-#                         430.225,
-#                         440.6125,
-#                         440.625,
-#                         440.6375,
-#                         440.65,
-#                         440.6625,
-#                         440.675,
-#                         440.6875,
-#                         440.7,
-#                         440.7125,
-#                         440.7375,
-#                         440.75,
-#                         440.7625,
-#                         440.775,
-#                         440.7875,
-#                         440.8,
-#                         440.8125,
-#                         440.825,
-#                         440.8375,
-#                         440.85,
-#                         440.8625,
-#                         440.875,
-#                         440.8875,
-#                         440.9,
-#                         445.6125,
-#                         445.625,
-#                         445.6375,
-#                         445.65,
-#                         445.6625,
-#                         445.675,
-#                         445.6875,
-#                         445.7,
-#                         445.7125,
-#                         445.725,
-#                         445.7375,
-#                         445.75,
-#                         445.7625,
-#                         445.775,
-#                         445.7875,
-#                         445.8,
-#                         440.725,
 #                         ])
-# pro.pro_5(230805, freq=[430.225,
+# run.pro_5(231015, freq=[430.225,
 #                         440.6125,
 #                         440.625,
 #                         440.6375,
@@ -570,18 +509,38 @@ run.pro_1(230801, freq=None)
 #                         445.8,
 #                         440.725,])
 
-pro.pro_6(230806, freq=[770.5,
-                        775.5,
-                        760.5,
-                        765.5,
-                        770.5,
-                        775.5,
-                        780.5,
-                        785.5,
-                        790.5,
-                        861.5,
-                        859,
-                        864,
-                        869,
-                        ])
-'''
+
+# run.pro_6(231016, freq=[770.5,
+#                         775.5,
+#                         760.5,
+#                         765.5,
+#                         770.5,
+#                         775.5,
+#                         780.5,
+#                         785.5,
+#                         790.5,
+#                         831.5,
+#                         836.5,
+#                         871.5,
+#                         876.5,
+#                         881.5,
+#                         892.5,
+#                         897.5,
+#                         902.5,
+#                         907.5,
+#                         912.5,
+#                         937.5,
+#                         942.5,
+#                         947.5,
+#                         952.5,
+#                         957.5,
+#                         ])
+
+# run.pro_7(231017, freq=None)
+
+# run.pro_8(231018, freq=None)
+# run.pro_9(231019, freq=[1712.5, 1747, 5, 1807.5, 1812.5, 1827.5, 1832.5, 1837.5, 1922.5, 1927.5, 1937.5,
+#           2112.5, 2117.5, 2122.5, 2127.5, 2142.5, 2152.5, 2322.5, 2332.5, 2342.5, 2362.5, 2532.5, 2557.5])
+
+
+run.pro_10(231020, freq=None)
