@@ -8,13 +8,16 @@ from frequencies import found_freq
 def start():
     while True:
         try:
-            choice = int(input("Enter 1 to select pro or 2 to run all pro : "))
-            if choice not in [1,2]:
-                raise ValueError("Please enter 1 or 2")    
+            choice = int(input("Enter 1 to select pro or 2 to run all pro or 3 for automation OPER[1,2,3] : "))
+            if choice not in [1,2,3]:
+                raise ValueError("Please enter 1 or 2, 3")    
             if choice == 1:
                 handle_select_pro()
-            else:
+            elif choice == 2:
                 handle_all_pro()
+            else:
+                easy_oper()
+                break
 
             if  ask_for_automation():
                 easy_oper()
@@ -25,7 +28,7 @@ def start():
     
 def handle_select_pro():
         input_date = get_valid_date("Enter date (YYMMDD): ")
-        input_pro = get_valid_pro("Enter pro (1-11): ",range(1,12))
+        input_pro = get_valid_pro("Enter pro  : ",range(1,14))
         input_percent_occunpancy_min = int(input("Enter Min_percent_occunpancy: "))
         input_percent_occunpancy_max = int(input("Enter Max_percent_occunpancy: "))
         select_pro(input_date, input_pro, input_percent_occunpancy_min, input_percent_occunpancy_max)
@@ -49,7 +52,7 @@ def get_valid_pro(prompt,value_range=None):
         try:
             value = int(input(prompt))
             if value_range and value not in value_range:
-                raise ValueError("Please enter correct pro (1-11)")
+                raise ValueError("Please enter correct pro (1-13)")
             return value
         except ValueError as e :
             print(e)
@@ -87,6 +90,10 @@ def select_pro(date, pro,num1=0,num2=0):
         run.pro_10(date,num1,num2, freq=None)
     elif pro == 11:
         run.pro_11(date,num1,num2, freq=None)
+    elif pro == 12:
+        run.pro_12(date,num1,num2, freq=found_freq["pro12"])
+    elif pro == 13:
+        run.pro_13(date,num1,num2, freq=found_freq["pro13"])
         
 
 

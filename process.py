@@ -261,7 +261,6 @@ class Create:
             # create new dataFrame every time
             self.df = pd.DataFrame()
             i += 1
-            # self.df['Frequency (Hz)'] = pd.Series(range(pro_1['start'],pro_1['stop']+ pro_1['step'],pro_1['step']))
             self.df['Frequency (Hz)'] = pd.Series(
                 range(v[0], v[1] + v[2], v[2]))
             self.make_occ(freq,num1,num2)
@@ -283,7 +282,6 @@ class Create:
             # create new dataFrame every time
             self.df = pd.DataFrame()
             i += 1
-            # self.df['Frequency (Hz)'] = pd.Series(range(pro_1['start'],pro_1['stop']+ pro_1['step'],pro_1['step']))
             self.df['Frequency (Hz)'] = pd.Series(
                 range(v[0], v[1] + v[2], v[2]))
             self.make_occ(freq,num1,num2)
@@ -307,7 +305,6 @@ class Create:
             # create new dataFrame every time
             self.df = pd.DataFrame()
             i += 1
-            # self.df['Frequency (Hz)'] = pd.Series(range(pro_1['start'],pro_1['stop']+ pro_1['step'],pro_1['step']))
             self.df['Frequency (Hz)'] = pd.Series(
                 range(v[0], v[1] + v[2], v[2]))
             self.make_occ(freq,num1,num2)
@@ -333,7 +330,6 @@ class Create:
             # create new dataFrame every time
             self.df = pd.DataFrame()
             i += 1
-            # self.df['Frequency (Hz)'] = pd.Series(range(pro_1['start'],pro_1['stop']+ pro_1['step'],pro_1['step']))
             self.df['Frequency (Hz)'] = pd.Series(
                 range(v[0], v[1] + v[2], v[2]))
             self.make_occ(freq,num1,num2)
@@ -359,7 +355,6 @@ class Create:
             # create new dataFrame every time
             self.df = pd.DataFrame()
             i += 1
-            # self.df['Frequency (Hz)'] = pd.Series(range(pro_1['start'],pro_1['stop']+ pro_1['step'],pro_1['step']))
             self.df['Frequency (Hz)'] = pd.Series(
                 range(v[0], v[1] + v[2], v[2]))
             self.make_occ(freq,num1,num2)
@@ -368,6 +363,49 @@ class Create:
             self.df.to_csv(f"automate/fco_data/pro_11_{i}.csv", index=False)
 
         return True
+    
+    def pro_12(self, date,num1,num2, **kwargs):
+        pro_12 = {"B1": [int(137 * 1e6), int(156 * 1e6), int(12.5 * 1e3)],
+                  "B2": [int(156 * 1e6), int(162.05 * 1e6), int(25 * 1e3)],
+                  "B3": [int(162.05 * 1e6), int(174 * 1e6), int(12.5 * 1e3)],
+                  }
+        # set frequency
+        freq = kwargs.get('freq', [])
+
+        # process
+        i = 0
+        for k, v in pro_12.items():
+            # create new dataFrame every time
+            self.df = pd.DataFrame()
+            i += 1
+            self.df['Frequency (Hz)'] = pd.Series(
+                range(v[0], v[1] + v[2], v[2]))
+            self.make_occ(freq,num1,num2)
+            self.df['File Info'] = self.create_info(1, date)
+
+            self.df.to_csv(f"automate/fco_data/pro_12_{i}.csv", index=False)
+
+        return True  
+
+    def pro_13(self, date,num1,num2, **kwargs):
+        pro_13 = { "B1": [int(474 * 1e6), int(690 * 1e6), int(8 * 1e6)]}
+        # set frequency
+        freq = kwargs.get('freq', [])
+
+        # process
+        i = 0
+        for k, v in pro_13.items():
+            # create new dataFrame every time
+            self.df = pd.DataFrame()
+            i += 1
+            self.df['Frequency (Hz)'] = pd.Series(
+                range(v[0], v[1] + v[2], v[2]))
+            self.make_occ(freq,num1,num2)
+            self.df['File Info'] = self.create_info(1, date)
+
+            self.df.to_csv(f"automate/fco_data/pro_13_{i}.csv", index=False)
+
+        return True   
 
 run = Create()
 
