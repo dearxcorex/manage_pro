@@ -44,6 +44,23 @@ class NBTC_Automation:
         except TimeoutException:
             print("DMS link was not available within the given time.")
 
+    def navigate_to_occ(self):
+        try:
+            click_occ = WebDriverWait(self.driver, 10).until(
+                EC.element_to_be_clickable(
+                    (By.XPATH, "//img[@src='asset/oper.svg']"))
+            )
+            click_occ.click()
+            click_nav = WebDriverWait(self.driver, 10).until(
+                EC.element_to_be_clickable(
+                    (By.XPATH, "//a[text()='งานตรวจสอบคลื่นความถี่']"))
+            )
+
+            click_nav.click()
+
+        except Exception as e:
+            print("An error occurred.", e)
+
     def upload_files(self):
         for file_name in os.listdir(self.absolute_path):
             file_path = os.path.join(self.absolute_path, file_name)
@@ -73,11 +90,12 @@ class NBTC_Automation:
     def confirm_upload(self):
         done_button = WebDriverWait(self.driver, 20).until(
             EC.element_to_be_clickable(
+                # ("//div[@class='row-40percent']/a[contains(text(),'Earn upto 2.5%')]")
                 (By.XPATH, "/html/body/div[4]/div/div[10]/button[1]"))
         )
         done_button.click()
 
-    def run(self):
+    def run_dms(self):
         self.login()
         self.navigate_to_dms()
         self.upload_files()
@@ -85,9 +103,14 @@ class NBTC_Automation:
     def close(self):
         self.driver.quit()
 
+    def run_occ(self):
+        self.login()
+        self.navigate_to_occ()
+
 
 if __name__ == "__main__":
     automation = NBTC_Automation("tossakun.y", "022135Bon!")
-    automation.run()
+    # automation.run_dms()
+    automation.run_occ()
     # Consider uncommenting the line below if you want to close the browser automatically after the run.
-    automation.close()
+    # automation.close()
